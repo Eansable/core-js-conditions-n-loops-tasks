@@ -62,8 +62,17 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  if (queen.x === king.x || queen.y === king.y) {
+    return true;
+  }
+  if (
+    queen.x - queen.y === king.x - king.y ||
+    queen.y + queen.x === king.y + king.x
+  ) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -85,7 +94,11 @@ function canQueenCaptureKing(/* queen, king */) {
  *  3, 0, 3   => false
  */
 function isIsoscelesTriangle(a, b, c) {
-  return a === b || b === c || a === c;
+  return (
+    (a === b && a + b > c && c > 0) ||
+    (b === c && b + c > a && a > 0) ||
+    (a === c && a + c > b && b > 0)
+  );
 }
 
 /**
@@ -102,8 +115,32 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  let res = '';
+  let tempNum = num;
+  const XCount = Math.trunc(tempNum / 10);
+  for (let i = 0; i < XCount; i += 1) {
+    res += 'X';
+    tempNum -= 10;
+  }
+  if (tempNum === 9) {
+    res += 'IX';
+    tempNum -= 9;
+  }
+  const VCount = Math.trunc(tempNum / 5);
+  for (let i = 0; i < VCount; i += 1) {
+    res += 'V';
+    tempNum -= 5;
+  }
+  if (tempNum === 4) {
+    res += 'IV';
+    tempNum -= 4;
+  }
+  while (tempNum > 0) {
+    res += 'I';
+    tempNum -= 1;
+  }
+  return res;
 }
 
 /**
@@ -227,9 +264,9 @@ function getIndexOf(str, letter) {
  */
 function isContainNumber(num, digit) {
   let res = num;
-  while (res > 1) {
+  while (res > 0) {
     if (res % 10 === digit) return true;
-    res = (res - (res % 10)) / 10;
+    res = Math.trunc(res / 10);
   }
   return false;
 }
